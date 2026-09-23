@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clasificador de Empresas</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f3f6fa;
+      color: #1f2937;
+    }
+    .contenedor {
+      max-width: 850px;
+      margin: 35px auto;
+      padding: 25px;
+    }
+    .tarjeta {
+      background: white;
+      border-radius: 14px;
+      padding: 28px;
+      box-shadow: 0 5px 20px rgba(0,0,0,.08);
+    }
+    h1 { margin-top: 0; color: #173b67; }
+    .subtitulo { color: #5b6470; margin-bottom: 25px; }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 7px;
+    }
+    input, select {
+      width: 100%;
+      padding: 11px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 15px;
+      background: white;
+    }
+    .completo { grid-column: 1 / -1; }
+    button {
+      width: 100%;
+      margin-top: 22px;
+      padding: 13px;
+      border: 0;
+      border-radius: 8px;
+      background: #173b67;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover { background: #0f2b4d; }
+    #resultado {
+      display: none;
+      margin-top: 25px;
+      padding: 22px;
+      border-radius: 10px;
+      background: #eef6ff;
+      border-left: 5px solid #173b67;
+    }
+    #resultado h2 { margin-top: 0; color: #173b67; }
+    .fila {
+      padding: 9px 0;
+      border-bottom: 1px solid #d7e2ee;
+    }
+    .fila:last-child { border-bottom: none; }
+    .nota {
+      margin-top: 20px;
+      font-size: 13px;
+      color: #667085;
+    }
+    @media (max-width: 650px) {
+      .grid { grid-template-columns: 1fr; }
+      .completo { grid-column: auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="contenedor">
+    <div class="tarjeta">
+      <h1>Clasificador de Empresas</h1>
+      <p class="subtitulo">
+        Complete los datos de la empresa y el sistema mostrará su clasificación.
+      </p>
+
+      <form id="formulario">
+        <div class="grid">
+          <div class="completo">
+            <label for="nombre">Nombre de la empresa</label>
+            <input type="text" id="nombre" placeholder="Ej. Empresa ABC" required>
+          </div>
+
+          <div>
+            <label for="empleados">Cantidad de colaboradores</label>
+            <input type="number" id="empleados" min="1" placeholder="Ej. 25" required>
+          </div>
+
+          <div>
+            <label for="ambito">Ámbito de operación</label>
+            <select id="ambito" required>
+              <option value="">Seleccione...</option>
+              <option value="Local">Local</option>
+              <option value="Nacional">Nacional</option>
+              <option value="Internacional">Internacional</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="beneficios">Destino de los beneficios</label>
+            <select id="beneficios" required>
+              <option value="">Seleccione...</option>
+              <option value="Lucro">Con fines de lucro</option>
+              <option value="No lucro">Sin fines de lucro</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="capital">Origen del capital</label>
+            <select id="capital" required>
+              <option value="">Seleccione...</option>
+              <option value="Privado">Privado</option>
+              <option value="Público">Público</option>
+              <option value="Mixto">Mixto</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="sector">Sector económico</label>
+            <select id="sector" required>
+              <option value="">Seleccione...</option>
+              <option value="Primario">Primario</option>
+              <option value="Secundario">Secundario</option>
+              <option value="Terciario">Terciario</option>
+              <option value="Cuaternario">Cuaternario</option>
+            </select>
+          </div>
+
+          <div class="completo">
+            <label for="juridica">Forma jurídica</label>
+            <select id="juridica" required>
+              <option value="">Seleccione...</option>
+              <option value="Persona física">Persona física</option>
+              <option value="Sociedad Anónima (S.A.)">Sociedad Anónima (S.A.)</option>
+              <option value="Sociedad de Responsabilidad Limitada (S.R.L.)">Sociedad de Responsabilidad Limitada (S.R.L.)</option>
+              <option value="Cooperativa">Cooperativa</option>
+              <option value="Otra">Otra</option>
+            </select>
+          </div>
+        </div>
+
+        <button type="submit">Clasificar empresa</button>
+      </form>
+
+      <div id="resultado">
+        <h2>Resultado de clasificación</h2>
+        <div id="textoResultado"></div>
+      </div>
+
+      <p class="nota">
+        Proyecto académico de Emprendimiento. Las reglas de clasificación deben coincidir
+        con la guía o presentación utilizada en clase.
+      </p>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("formulario").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const nombre = document.getElementById("nombre").value.trim();
+      const empleados = Number(document.getElementById("empleados").value);
+      const ambito = document.getElementById("ambito").value;
+      const beneficios = document.getElementById("beneficios").value;
+      const capital = document.getElementById("capital").value;
+      const sector = document.getElementById("sector").value;
+      const juridica = document.getElementById("juridica").value;
+
+      let tamano;
+
+      // Regla usada para este proyecto:
+      // Micro: 1-10 | Pequeña: 11-35 | Mediana: 36-100 | Grande: 101+
+      if (empleados <= 10) {
+        tamano = "Microempresa";
+      } else if (empleados <= 35) {
+        tamano = "Pequeña empresa";
+      } else if (empleados <= 100) {
+        tamano = "Mediana empresa";
+      } else {
+        tamano = "Gran empresa";
+      }
+
+      document.getElementById("textoResultado").innerHTML = `
+        <div class="fila"><strong>Empresa:</strong> ${nombre}</div>
+        <div class="fila"><strong>Ámbito:</strong> ${ambito}</div>
+        <div class="fila"><strong>Destino de beneficios:</strong> ${beneficios}</div>
+        <div class="fila"><strong>Origen del capital:</strong> ${capital}</div>
+        <div class="fila"><strong>Tamaño:</strong> ${tamano} (${empleados} colaboradores)</div>
+        <div class="fila"><strong>Sector económico:</strong> ${sector}</div>
+        <div class="fila"><strong>Forma jurídica:</strong> ${juridica}</div>
+      `;
+
+      document.getElementById("resultado").style.display = "block";
+      document.getElementById("resultado").scrollIntoView({ behavior: "smooth" });
+    });
+  </script>
+</body>
+</html>
