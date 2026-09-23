@@ -3,39 +3,59 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Clasificador de Empresas</title>
+
   <style>
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       font-family: Arial, sans-serif;
       background: #f3f6fa;
       color: #1f2937;
     }
+
     .contenedor {
       max-width: 850px;
       margin: 35px auto;
       padding: 25px;
     }
+
     .tarjeta {
       background: white;
       border-radius: 14px;
       padding: 28px;
-      box-shadow: 0 5px 20px rgba(0,0,0,.08);
+      box-shadow: 0 5px 20px rgba(0, 0, 0, .08);
     }
-    h1 { margin-top: 0; color: #173b67; }
-    .subtitulo { color: #5b6470; margin-bottom: 25px; }
+
+    h1 {
+      margin-top: 0;
+      color: #173b67;
+    }
+
+    .subtitulo {
+      color: #5b6470;
+      margin-bottom: 25px;
+      line-height: 1.5;
+    }
+
     .grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 18px;
     }
+
     label {
       display: block;
       font-weight: bold;
       margin-bottom: 7px;
     }
-    input, select {
+
+    input,
+    select {
       width: 100%;
       padding: 11px;
       border: 1px solid #cbd5e1;
@@ -43,7 +63,32 @@
       font-size: 15px;
       background: white;
     }
-    .completo { grid-column: 1 / -1; }
+
+    .completo {
+      grid-column: 1 / -1;
+    }
+
+    .pregunta {
+      padding: 16px;
+      background: #f8fafc;
+      border-radius: 10px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .pregunta p {
+      margin-top: 0;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    .ayuda {
+      display: block;
+      margin-top: 6px;
+      font-size: 12px;
+      color: #64748b;
+      line-height: 1.4;
+    }
+
     button {
       width: 100%;
       margin-top: 22px;
@@ -56,7 +101,11 @@
       font-weight: bold;
       cursor: pointer;
     }
-    button:hover { background: #0f2b4d; }
+
+    button:hover {
+      background: #0f2b4d;
+    }
+
     #resultado {
       display: none;
       margin-top: 25px;
@@ -65,150 +114,674 @@
       background: #eef6ff;
       border-left: 5px solid #173b67;
     }
-    #resultado h2 { margin-top: 0; color: #173b67; }
+
+    #resultado h2 {
+      margin-top: 0;
+      color: #173b67;
+    }
+
     .fila {
       padding: 9px 0;
       border-bottom: 1px solid #d7e2ee;
     }
-    .fila:last-child { border-bottom: none; }
+
+    .fila:last-child {
+      border-bottom: none;
+    }
+
     .nota {
       margin-top: 20px;
       font-size: 13px;
       color: #667085;
+      line-height: 1.5;
     }
+
     @media (max-width: 650px) {
-      .grid { grid-template-columns: 1fr; }
-      .completo { grid-column: auto; }
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .completo {
+        grid-column: auto;
+      }
     }
   </style>
 </head>
+
 <body>
+
   <div class="contenedor">
     <div class="tarjeta">
+
       <h1>Clasificador de Empresas</h1>
+
       <p class="subtitulo">
-        Complete los datos de la empresa y el sistema mostrará su clasificación.
+        Responda las siguientes preguntas sobre la empresa.
+        El sistema analizará las respuestas y determinará automáticamente
+        su clasificación empresarial.
       </p>
 
       <form id="formulario">
+
         <div class="grid">
+
+          <!-- NOMBRE -->
           <div class="completo">
             <label for="nombre">Nombre de la empresa</label>
-            <input type="text" id="nombre" placeholder="Ej. Empresa ABC" required>
+            <input
+              type="text"
+              id="nombre"
+              placeholder="Ej. Empresa ABC"
+              required
+            >
           </div>
 
+
+          <!-- TAMAÑO -->
           <div>
-            <label for="empleados">Cantidad de colaboradores</label>
-            <input type="number" id="empleados" min="1" placeholder="Ej. 25" required>
+            <label for="empleados">
+              ¿Cuántas personas trabajan en la empresa?
+            </label>
+
+            <input
+              type="number"
+              id="empleados"
+              min="1"
+              placeholder="Ej. 25"
+              required
+            >
           </div>
 
+
+          <!-- ÁMBITO -->
           <div>
-            <label for="ambito">Ámbito de operación</label>
-            <select id="ambito" required>
+            <label for="operacion">
+              ¿En qué lugares realiza sus operaciones?
+            </label>
+
+            <select id="operacion" required>
               <option value="">Seleccione...</option>
-              <option value="Local">Local</option>
-              <option value="Nacional">Nacional</option>
-              <option value="Internacional">Internacional</option>
+
+              <option value="comunidad">
+                Solo en una comunidad, cantón o zona específica
+              </option>
+
+              <option value="pais">
+                En diferentes lugares dentro del país
+              </option>
+
+              <option value="internacional">
+                En Costa Rica y también en otros países
+              </option>
             </select>
           </div>
 
-          <div>
-            <label for="beneficios">Destino de los beneficios</label>
-            <select id="beneficios" required>
+
+          <!-- BENEFICIOS -->
+          <div class="pregunta completo">
+
+            <p>
+              ¿Qué ocurre principalmente con las ganancias que obtiene la empresa?
+            </p>
+
+            <select id="ganancias" required>
               <option value="">Seleccione...</option>
-              <option value="Lucro">Con fines de lucro</option>
-              <option value="No lucro">Sin fines de lucro</option>
+
+              <option value="propietarios">
+                Se utilizan para beneficiar a los propietarios o socios
+              </option>
+
+              <option value="reinversionSocial">
+                Se utilizan para cumplir una causa social,
+                comunitaria o de beneficio colectivo
+              </option>
             </select>
+
           </div>
 
-          <div>
-            <label for="capital">Origen del capital</label>
-            <select id="capital" required>
+
+          <!-- CAPITAL -->
+          <div class="pregunta completo">
+
+            <p>
+              ¿De dónde provienen principalmente los recursos o dinero
+              utilizados para financiar la empresa?
+            </p>
+
+            <select id="financiamiento" required>
               <option value="">Seleccione...</option>
-              <option value="Privado">Privado</option>
-              <option value="Público">Público</option>
-              <option value="Mixto">Mixto</option>
+
+              <option value="personas">
+                De personas, socios, inversionistas o empresas privadas
+              </option>
+
+              <option value="estado">
+                Del Estado o instituciones públicas
+              </option>
+
+              <option value="ambos">
+                Tanto del Estado como de personas o empresas privadas
+              </option>
             </select>
+
           </div>
 
-          <div>
-            <label for="sector">Sector económico</label>
-            <select id="sector" required>
+
+          <!-- SECTOR -->
+          <div class="pregunta completo">
+
+            <p>
+              ¿Cuál describe mejor la actividad principal que realiza la empresa?
+            </p>
+
+            <select id="actividad" required>
               <option value="">Seleccione...</option>
-              <option value="Primario">Primario</option>
-              <option value="Secundario">Secundario</option>
-              <option value="Terciario">Terciario</option>
-              <option value="Cuaternario">Cuaternario</option>
+
+              <option value="naturaleza">
+                Obtiene directamente recursos de la naturaleza,
+                como agricultura, pesca, ganadería o minería
+              </option>
+
+              <option value="transformacion">
+                Transforma materias primas para fabricar productos
+              </option>
+
+              <option value="servicios">
+                Ofrece servicios, comercio, transporte,
+                turismo, educación u otras actividades similares
+              </option>
+
+              <option value="conocimiento">
+                Se dedica principalmente a tecnología,
+                investigación, información o desarrollo de conocimiento
+              </option>
             </select>
+
           </div>
 
-          <div class="completo">
-            <label for="juridica">Forma jurídica</label>
-            <select id="juridica" required>
+
+          <!-- FORMA JURÍDICA -->
+          <div class="pregunta completo">
+
+            <p>
+              ¿La empresa pertenece y es administrada por una sola persona?
+            </p>
+
+            <select id="unPropietario" required>
               <option value="">Seleccione...</option>
-              <option value="Persona física">Persona física</option>
-              <option value="Sociedad Anónima (S.A.)">Sociedad Anónima (S.A.)</option>
-              <option value="Sociedad de Responsabilidad Limitada (S.R.L.)">Sociedad de Responsabilidad Limitada (S.R.L.)</option>
-              <option value="Cooperativa">Cooperativa</option>
-              <option value="Otra">Otra</option>
+              <option value="si">Sí</option>
+              <option value="no">No</option>
             </select>
+
           </div>
+
+
+          <div
+            class="pregunta completo"
+            id="preguntaCooperativa"
+            style="display:none;"
+          >
+
+            <p>
+              ¿La organización pertenece a un grupo de asociados que participan
+              conjuntamente en las decisiones y beneficios?
+            </p>
+
+            <select id="esCooperativa">
+              <option value="">Seleccione...</option>
+              <option value="si">Sí</option>
+              <option value="no">No</option>
+            </select>
+
+          </div>
+
+
+          <div
+            class="pregunta completo"
+            id="preguntaAcciones"
+            style="display:none;"
+          >
+
+            <p>
+              ¿La participación de los propietarios está representada
+              mediante acciones que pueden pertenecer a distintos accionistas?
+            </p>
+
+            <select id="acciones">
+              <option value="">Seleccione...</option>
+              <option value="si">Sí</option>
+              <option value="no">No</option>
+            </select>
+
+            <span class="ayuda">
+              Esta respuesta ayuda al sistema a distinguir entre diferentes
+              tipos de sociedades.
+            </span>
+
+          </div>
+
+
+          <div
+            class="pregunta completo"
+            id="preguntaCuotas"
+            style="display:none;"
+          >
+
+            <p>
+              ¿La empresa pertenece a un grupo limitado de socios
+              y la participación de cada uno no se maneja mediante acciones?
+            </p>
+
+            <select id="sociosLimitados">
+              <option value="">Seleccione...</option>
+              <option value="si">Sí</option>
+              <option value="no">No</option>
+            </select>
+
+          </div>
+
         </div>
 
-        <button type="submit">Clasificar empresa</button>
+
+        <button type="submit">
+          Clasificar empresa
+        </button>
+
       </form>
 
+
+      <!-- RESULTADO -->
+
       <div id="resultado">
+
         <h2>Resultado de clasificación</h2>
+
         <div id="textoResultado"></div>
+
       </div>
 
+
       <p class="nota">
-        Proyecto académico de Emprendimiento. Las reglas de clasificación deben coincidir
-        con la guía o presentación utilizada en clase.
+        Proyecto académico de Emprendimiento.
+        El sistema determina las clasificaciones utilizando las respuestas
+        proporcionadas sobre las características de la empresa.
       </p>
+
     </div>
   </div>
 
+
   <script>
-    document.getElementById("formulario").addEventListener("submit", function(event) {
-      event.preventDefault();
 
-      const nombre = document.getElementById("nombre").value.trim();
-      const empleados = Number(document.getElementById("empleados").value);
-      const ambito = document.getElementById("ambito").value;
-      const beneficios = document.getElementById("beneficios").value;
-      const capital = document.getElementById("capital").value;
-      const sector = document.getElementById("sector").value;
-      const juridica = document.getElementById("juridica").value;
+    /* =====================================================
+       MOSTRAR PREGUNTAS DE FORMA JURÍDICA
+       ===================================================== */
 
-      let tamano;
+    const unPropietario = document.getElementById("unPropietario");
 
-      // Regla usada para este proyecto:
-      // Micro: 1-10 | Pequeña: 11-35 | Mediana: 36-100 | Grande: 101+
-      if (empleados <= 10) {
-        tamano = "Microempresa";
-      } else if (empleados <= 35) {
-        tamano = "Pequeña empresa";
-      } else if (empleados <= 100) {
-        tamano = "Mediana empresa";
-      } else {
-        tamano = "Gran empresa";
+    const preguntaCooperativa =
+      document.getElementById("preguntaCooperativa");
+
+    const preguntaAcciones =
+      document.getElementById("preguntaAcciones");
+
+    const preguntaCuotas =
+      document.getElementById("preguntaCuotas");
+
+
+    unPropietario.addEventListener("change", function () {
+
+      const esCooperativa =
+        document.getElementById("esCooperativa");
+
+      const acciones =
+        document.getElementById("acciones");
+
+      const sociosLimitados =
+        document.getElementById("sociosLimitados");
+
+
+      if (this.value === "si") {
+
+        preguntaCooperativa.style.display = "none";
+        preguntaAcciones.style.display = "none";
+        preguntaCuotas.style.display = "none";
+
+        esCooperativa.required = false;
+        acciones.required = false;
+        sociosLimitados.required = false;
+
+        esCooperativa.value = "";
+        acciones.value = "";
+        sociosLimitados.value = "";
+
+      } else if (this.value === "no") {
+
+        preguntaCooperativa.style.display = "block";
+
+        esCooperativa.required = true;
+
       }
 
-      document.getElementById("textoResultado").innerHTML = `
-        <div class="fila"><strong>Empresa:</strong> ${nombre}</div>
-        <div class="fila"><strong>Ámbito:</strong> ${ambito}</div>
-        <div class="fila"><strong>Destino de beneficios:</strong> ${beneficios}</div>
-        <div class="fila"><strong>Origen del capital:</strong> ${capital}</div>
-        <div class="fila"><strong>Tamaño:</strong> ${tamano} (${empleados} colaboradores)</div>
-        <div class="fila"><strong>Sector económico:</strong> ${sector}</div>
-        <div class="fila"><strong>Forma jurídica:</strong> ${juridica}</div>
-      `;
-
-      document.getElementById("resultado").style.display = "block";
-      document.getElementById("resultado").scrollIntoView({ behavior: "smooth" });
     });
+
+
+    /* =====================================================
+       PREGUNTA SOBRE COOPERATIVA
+       ===================================================== */
+
+    document
+      .getElementById("esCooperativa")
+      .addEventListener("change", function () {
+
+        const acciones =
+          document.getElementById("acciones");
+
+        const sociosLimitados =
+          document.getElementById("sociosLimitados");
+
+
+        if (this.value === "si") {
+
+          preguntaAcciones.style.display = "none";
+          preguntaCuotas.style.display = "none";
+
+          acciones.required = false;
+          sociosLimitados.required = false;
+
+          acciones.value = "";
+          sociosLimitados.value = "";
+
+        } else if (this.value === "no") {
+
+          preguntaAcciones.style.display = "block";
+
+          acciones.required = true;
+
+        }
+
+      });
+
+
+    /* =====================================================
+       PREGUNTA SOBRE ACCIONES
+       ===================================================== */
+
+    document
+      .getElementById("acciones")
+      .addEventListener("change", function () {
+
+        const sociosLimitados =
+          document.getElementById("sociosLimitados");
+
+
+        if (this.value === "si") {
+
+          preguntaCuotas.style.display = "none";
+
+          sociosLimitados.required = false;
+          sociosLimitados.value = "";
+
+        } else if (this.value === "no") {
+
+          preguntaCuotas.style.display = "block";
+
+          sociosLimitados.required = true;
+
+        }
+
+      });
+
+
+    /* =====================================================
+       CLASIFICACIÓN
+       ===================================================== */
+
+    document
+      .getElementById("formulario")
+      .addEventListener("submit", function (event) {
+
+        event.preventDefault();
+
+
+        /* DATOS INGRESADOS */
+
+        const nombre =
+          document.getElementById("nombre").value.trim();
+
+        const empleados =
+          Number(document.getElementById("empleados").value);
+
+        const operacion =
+          document.getElementById("operacion").value;
+
+        const ganancias =
+          document.getElementById("ganancias").value;
+
+        const financiamiento =
+          document.getElementById("financiamiento").value;
+
+        const actividad =
+          document.getElementById("actividad").value;
+
+
+        /* =====================================================
+           1. ÁMBITO
+           ===================================================== */
+
+        let ambito;
+
+        if (operacion === "comunidad") {
+
+          ambito = "Local";
+
+        } else if (operacion === "pais") {
+
+          ambito = "Nacional";
+
+        } else {
+
+          ambito = "Internacional";
+
+        }
+
+
+        /* =====================================================
+           2. DESTINO DE BENEFICIOS
+           ===================================================== */
+
+        let beneficios;
+
+        if (ganancias === "propietarios") {
+
+          beneficios = "Con fines de lucro";
+
+        } else {
+
+          beneficios = "Sin fines de lucro";
+
+        }
+
+
+        /* =====================================================
+           3. ORIGEN DEL CAPITAL
+           ===================================================== */
+
+        let capital;
+
+        if (financiamiento === "estado") {
+
+          capital = "Público";
+
+        } else if (financiamiento === "personas") {
+
+          capital = "Privado";
+
+        } else {
+
+          capital = "Mixto";
+
+        }
+
+
+        /* =====================================================
+           4. TAMAÑO
+           ===================================================== */
+
+        let tamano;
+
+        // Rangos utilizados en este proyecto:
+        // Micro: 1-10
+        // Pequeña: 11-35
+        // Mediana: 36-100
+        // Grande: 101+
+
+        if (empleados <= 10) {
+
+          tamano = "Microempresa";
+
+        } else if (empleados <= 35) {
+
+          tamano = "Pequeña empresa";
+
+        } else if (empleados <= 100) {
+
+          tamano = "Mediana empresa";
+
+        } else {
+
+          tamano = "Gran empresa";
+
+        }
+
+
+        /* =====================================================
+           5. SECTOR ECONÓMICO
+           ===================================================== */
+
+        let sector;
+
+        if (actividad === "naturaleza") {
+
+          sector = "Primario";
+
+        } else if (actividad === "transformacion") {
+
+          sector = "Secundario";
+
+        } else if (actividad === "servicios") {
+
+          sector = "Terciario";
+
+        } else {
+
+          sector = "Cuaternario";
+
+        }
+
+
+        /* =====================================================
+           6. FORMA JURÍDICA
+           ===================================================== */
+
+        const propietario =
+          document.getElementById("unPropietario").value;
+
+        const cooperativa =
+          document.getElementById("esCooperativa").value;
+
+        const acciones =
+          document.getElementById("acciones").value;
+
+        const socios =
+          document.getElementById("sociosLimitados").value;
+
+
+        let juridica;
+
+
+        if (propietario === "si") {
+
+          juridica = "Persona física";
+
+        } else if (cooperativa === "si") {
+
+          juridica = "Cooperativa";
+
+        } else if (acciones === "si") {
+
+          juridica = "Sociedad Anónima (S.A.)";
+
+        } else if (socios === "si") {
+
+          juridica =
+            "Sociedad de Responsabilidad Limitada (S.R.L.)";
+
+        } else {
+
+          juridica =
+            "Otra forma jurídica";
+
+        }
+
+
+        /* =====================================================
+           MOSTRAR RESULTADOS
+           ===================================================== */
+
+        document.getElementById("textoResultado").innerHTML = `
+
+          <div class="fila">
+            <strong>Empresa:</strong>
+            ${nombre}
+          </div>
+
+          <div class="fila">
+            <strong>Ámbito:</strong>
+            ${ambito}
+          </div>
+
+          <div class="fila">
+            <strong>Destino de beneficios:</strong>
+            ${beneficios}
+          </div>
+
+          <div class="fila">
+            <strong>Origen del capital:</strong>
+            ${capital}
+          </div>
+
+          <div class="fila">
+            <strong>Tamaño:</strong>
+            ${tamano} (${empleados} colaboradores)
+          </div>
+
+          <div class="fila">
+            <strong>Sector económico:</strong>
+            ${sector}
+          </div>
+
+          <div class="fila">
+            <strong>Forma jurídica:</strong>
+            ${juridica}
+          </div>
+
+        `;
+
+
+        document.getElementById("resultado").style.display =
+          "block";
+
+
+        document
+          .getElementById("resultado")
+          .scrollIntoView({
+            behavior: "smooth"
+          });
+
+      });
+
   </script>
+
 </body>
 </html>
